@@ -2,3 +2,5 @@ discord
 python-dotenv
 motor
 python-decouple
+pytz
+aiohttp
