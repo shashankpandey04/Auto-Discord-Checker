@@ -4,3 +4,4 @@ motor
 python-decouple
 pytz
 aiohttp
+requests
