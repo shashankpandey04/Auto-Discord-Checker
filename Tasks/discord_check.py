@@ -19,7 +19,7 @@ async def discord_checks(bot):
     logging.warning("[ITERATE] Starting Discord Check Iteration")
 
     async for guild_data in bot.settings.db.find():
-        guild_id = guild_data["_id"]
+        guild_id = guild_data["guild_id"]
         try:
             guild = bot.get_guild(int(guild_id))
         except discord.errors.NotFound:
