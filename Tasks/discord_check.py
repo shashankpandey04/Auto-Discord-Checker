@@ -40,7 +40,7 @@ async def discord_checks(bot):
         
         alert_channel_id = guild_data["alert_channel"]
         try:
-            alert_channel = guild.get_channel(alert_channel_id)
+            alert_channel = guild.get_channel(int(alert_channel_id))
         except discord.errors.NotFound:
             logging.warning(f"[ITERATE] Alert channel with ID {alert_channel_id} not found in guild {guild_id}")
             continue
