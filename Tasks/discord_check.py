@@ -61,27 +61,17 @@ async def discord_checks(bot):
                 player_id = player.Player.split(":")[1]
                 player_name = player_name.strip()
 
-                pattern = re.compile(re.escape(player.Player.split(":")[0]), re.IGNORECASE)
-                member_found = False
+                for member in guild.members:
+                    if pattern.search(member.name) or pattern.search(member.display_name) or (
+                        hasattr(member, 'global_name') and member.global_name and pattern.search(member.global_name)
+                    ):
+                        member_found = True
+                        break  # Stop searching once we find a match
 
-                for player in players:
-                    player_name = player.Player.split(":")[0]
-                    player_id = player.Player.split(":")[1]
-
-                    pattern = re.compile(re.escape(player_name), re.IGNORECASE)
-                    member_found = False
-
-                    for member in guild.members:
-                        if pattern.search(member.name) or pattern.search(member.display_name) or (
-                            hasattr(member, 'global_name') and member.global_name and pattern.search(member.global_name)
-                        ):
-                            member_found = True
-                            break  # Stop searching once we find a match
-
-                    # Append only if we never found the player in the Discord server
-                    if not member_found:
-                        embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
-                        not_in_discord.append(player_name)
+                # Append only if we never found the player in the Discord server
+                if not member_found:
+                    embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
+                    not_in_discord.append(player_name)
 
             if embed.description == "":
                 embed.description = "> All players are in the Discord server."
