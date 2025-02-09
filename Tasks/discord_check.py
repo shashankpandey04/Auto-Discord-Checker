@@ -83,11 +83,7 @@ async def discord_checks(bot):
         )
 
         message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
-        response = await bot.prc_api._send_command(guild_id, message)
-        if response.status == 200:
-            logging.info(f"[ITERATE] Sent message to {guild_id} with response {response}")
-        else:
-            logging.error(f"[ITERATE] Failed to send message to {guild_id} with response {response}")
+        await bot.prc_api._send_command(guild_id, message)
         
         try:
             if alert_channel:
