@@ -55,8 +55,13 @@ async def discord_checks(bot):
 
             not_in_discord = []
 
+            import unicodedata
+
             def normalize_name(name):
-                """Removes special characters and converts to lowercase for better matching."""
+                """Cleans up names for better matching."""
+                # Remove everything before the first special character
+                name = re.sub(r'^[^a-zA-Z0-9]*', '', name)
+                # Remove special characters and convert to lowercase
                 return re.sub(r'[^a-zA-Z0-9]', '', name).lower()
 
             for player in players:
