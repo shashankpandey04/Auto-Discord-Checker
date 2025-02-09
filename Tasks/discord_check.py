@@ -59,20 +59,28 @@ async def discord_checks(bot):
                     
                 player_name = player.Player.split(":")[0]
                 player_id = player.Player.split(":")[1]
+                player_name = player_name.strip()
 
-                pattern = re.compile(re.escape(player_name), re.IGNORECASE)
+                pattern = re.compile(re.escape(player.Player.split(":")[0]), re.IGNORECASE)
                 member_found = False
 
-                for member in guild.members:
-                    if pattern.search(member.name) or pattern.search(member.display_name) or (
-                        hasattr(member, 'global_name') and 
-                        member.global_name and 
-                        pattern.search(member.global_name)
-                    ):
-                        member_found = True
-                        break
+                for player in players:
+                    player_name = player.Player.split(":")[0]
+                    player_id = player.Player.split(":")[1]
 
+                    pattern = re.compile(re.escape(player_name), re.IGNORECASE)
+                    member_found = False
+
+                    for member in guild.members:
+                        if pattern.search(member.name) or pattern.search(member.display_name) or (
+                            hasattr(member, 'global_name') and member.global_name and pattern.search(member.global_name)
+                        ):
+                            member_found = True
+                            break  # Stop searching once we find a match
+
+                    # Append only if we never found the player in the Discord server
                     if not member_found:
+                        logging.warning(f"[DEBUG] Player {player_name} not found in guild {guild_id}")
                         embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                         not_in_discord.append(player_name)
 
@@ -91,7 +99,7 @@ async def discord_checks(bot):
 
             try:
                 if alert_channel:
-                    await alert_channel.send(embed=embed)
+                    #await alert_channel.send(embed=embed)
                     pass
             except discord.errors.Forbidden:
                 logging.warning(f"[ITERATE] Missing permissions to send messages in guild {guild_id}")
