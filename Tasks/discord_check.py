@@ -54,6 +54,7 @@ async def discord_checks(bot):
         for player in players:
             #PlayerName:Id => get the name
             player_name = player.Player.split(":")[0]
+            player_id = player.Player.split(":")[1]
             pattern = re.compile(re.escape(player_name), re.IGNORECASE)
             member_found = False
 
@@ -73,7 +74,7 @@ async def discord_checks(bot):
                     pass
 
             if not member_found:
-                embed.description += f"> [{player_name}](https://roblox.com/users/{player.id}/profile)\n"
+                embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                 not_in_discord.append(player_name)
 
         if embed.description == "":
