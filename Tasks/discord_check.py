@@ -47,6 +47,7 @@ async def discord_checks(bot):
             color=BLANK_COLOR,
             timestamp=datetime.datetime.now(pytz.utc),
         )
+        embed.description = ""
 
         not_in_discord = []
 
