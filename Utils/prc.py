@@ -127,7 +127,7 @@ class PRC_API_Client:
             print(f"Server key not found for {server_id}")
             return None
         
-        print(f"Fetching server key for {server_id}: {server_key.get('api_key', 'No API Key Found')}")
+        print(f"Fetching server key for {server_id}: {"Found" if server_key else "Not Found"}")
         return server_key
 
     async def _send_request(self, method: str, endpoint: str, server_id: int, **kwargs):
@@ -135,8 +135,7 @@ class PRC_API_Client:
         if not server_key or "api_key" not in server_key:
             print(f"Skipping {server_id} due to missing server key")
         async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={
-            "authorization": server_key['api_key'],
-            "Content-Type": "application/json"
+            "Server-Key": server_key['api_key']
             }, **kwargs) as resp:
             data = await resp.json()
             if resp.status == 200:
