@@ -52,7 +52,9 @@ async def discord_checks(bot):
         not_in_discord = []
 
         for player in players:
-            pattern = re.compile(re.escape(player.username), re.IGNORECASE)
+            #PlayerName:Id => get the name
+            player_name = player.Player.split(":")[0]
+            pattern = re.compile(re.escape(player_name), re.IGNORECASE)
             member_found = False
 
             for member in guild.members:
@@ -62,7 +64,7 @@ async def discord_checks(bot):
 
             if not member_found:
                 try:
-                    discord_id = await get_discord_by_roblox(bot, player.username)
+                    discord_id = await get_discord_by_roblox(bot, player_name)
                     if discord_id:
                         member = guild.get_member(discord_id)
                         if member:
@@ -71,8 +73,8 @@ async def discord_checks(bot):
                     pass
 
             if not member_found:
-                embed.description += f"> [{player.username}](https://roblox.com/users/{player.id}/profile)\n"
-                not_in_discord.append(player.username)
+                embed.description += f"> [{player_name}](https://roblox.com/users/{player.id}/profile)\n"
+                not_in_discord.append(player_name)
 
         if embed.description == "":
             embed.description = "> All players are in the Discord server."
@@ -102,4 +104,5 @@ async def discord_checks(bot):
     end_time = time.time()
     logging.warning(f"[ITERATE] Discord Check Iteration finished in {end_time - start_time} seconds")
     logging.warning(f"[ITERATE] Next Discord Check Iteration in 2 minutes")
+    logging.warning(f"[ITERATE] Checked {total_guilds} guilds")
                         
