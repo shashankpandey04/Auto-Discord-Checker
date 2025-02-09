@@ -60,8 +60,8 @@ async def discord_checks(bot):
                 if not player.get('Player'):
                     continue
                     
-                player_name = player['Player'].split(":")[0]
-                player_id = player['Player'].split(":")[1]
+                player_name = player.Player.split(":")[0]
+                player_id = player.Player.split(":")[1]
 
                 pattern = re.compile(re.escape(player_name), re.IGNORECASE)
                 member_found = False

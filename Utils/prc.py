@@ -37,11 +37,15 @@ class ServerStatus():
     def __init__(self, *args, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+class ServerPlayers():
+    Player: str | None
+    Permission: str
+    Callsign: str | None
+    Team: str | None
 
-class ServerPlayers(dict):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.update(**kwargs)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
 class ServerJoinLogs():
     Join: bool
@@ -166,8 +170,7 @@ class PRC_API_Client:
         return ServerStatus(**await self._send_request("GET", "server", server_id))
 
     async def _fetch_server_players(self, server_id: int):
-        data = await self._send_request("GET", "server/players", server_id)
-        return [ServerPlayers(x) for x in data]
+        return [ServerPlayers(**x) for x in await self._send_request("GET", "server/players", server_id)]
 
     async def _fetch_server_join_logs(self, server_id: int):
         return [ServerJoinLogs(**x) for x in await self._send_request("GET", "server/joinlogs", server_id)]
