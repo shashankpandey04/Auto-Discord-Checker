@@ -124,14 +124,15 @@ class PRC_API_Client:
         server_key = await self.fetch_server_key(server_id)
         if not server_key:
             raise ServerLinkNotFound("Server link not found")
-        async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={"Server-Key": server_key["api_key"]}, **kwargs) as resp:
+        async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={
+            "authorization": server_key["api_key"],
+            "Content-Type":"application/json"
+            }, **kwargs) as resp:
             data = await resp.json()
             if resp.status == 200:
                 return data
             elif resp.status == 429:
-                retry_after = data.get("retry_after")
-                await asyncio.sleep(retry_after)
-                return await self._send_request(method, endpoint, server_id, **kwargs)
+                raise ResponseFailed(data, detail="Rate Limited", code=429)
             elif resp.status == 400:
                 raise ResponseFailed(data, detail="Bad Request", code=400)
             elif resp.status == 403:

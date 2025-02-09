@@ -43,6 +43,7 @@ async def discord_checks(bot):
         if total_players < minimum_players:
             logging.warning(f"[ITERATE] Not enough players in guild {guild_id} ({total_players}/{minimum_players})")
             continue
+        logging.info(f"[ITERATE] Checking {total_players} players in guild {guild_id}")
         
         alert_channel_id = guild_data["alert_channel"]
         try:
