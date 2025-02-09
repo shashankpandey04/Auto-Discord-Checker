@@ -61,6 +61,9 @@ async def discord_checks(bot):
                 player_id = player.Player.split(":")[1]
                 player_name = player_name.strip()
 
+                pattern = re.compile(re.escape(player.Player.split(":")[0]), re.IGNORECASE)
+                member_found = False
+
                 for member in guild.members:
                     if pattern.search(member.name) or pattern.search(member.display_name) or (
                         hasattr(member, 'global_name') and member.global_name and pattern.search(member.global_name)
