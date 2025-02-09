@@ -17,7 +17,7 @@ from Utils import prc
 async def discord_checks(bot):
     start_time = time.time()
     logging.warning("[ITERATE] Starting Discord Check Iteration")
-
+    total_guilds = 0
     async for guild_data in bot.settings.db.find():
         guild_id = guild_data["guild_id"]
         try:
@@ -95,7 +95,9 @@ async def discord_checks(bot):
         except discord.errors.HTTPException:
             logging.warning(f"[ITERATE] Failed to send message in guild {guild_id}")
 
-        time.sleep(1)
+        total_guilds += 1
+
+        time.sleep(2)
 
     end_time = time.time()
     logging.warning(f"[ITERATE] Discord Check Iteration finished in {end_time - start_time} seconds")
