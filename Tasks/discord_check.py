@@ -62,23 +62,18 @@ async def discord_checks(bot):
                     
                 player_name = player['Player'].split(":")[0]
                 player_id = player['Player'].split(":")[1]
-                
-                pattern = re.compile(re.escape(player_name), re.IGNORECASE)
+
                 pattern = re.compile(rf"\b{re.escape(player_name)}\b", re.IGNORECASE)
                 member_found = False
 
                 for member in guild.members:
-                    if pattern.search(member.name) or pattern.search(member.display_name) or (
-                        hasattr(member, 'global_name') and 
-                        member.global_name and 
-                        pattern.search(member.global_name)
-                    ):
+                    if pattern.search(member.display_name):
                         member_found = True
                         break
 
-                if not member_found:
-                    embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
-                    not_in_discord.append(player_name)
+                    if not member_found:
+                        embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
+                        not_in_discord.append(player_name)
 
             if embed.description == "":
                 embed.description = "> All players are in the Discord server."
