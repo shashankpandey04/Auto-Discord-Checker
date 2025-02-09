@@ -31,7 +31,7 @@ async def discord_checks(bot):
             continue
         try:
             players: list[ServerPlayers] = await bot.prc_api._fetch_server_players(guild_id)
-        except prc.ResponseFailure:
+        except prc.ResponseFailed:
             logging.error(f"PRC ResponseFailure for guild {guild_id}")
             continue
         logging.info(f"[ITERATE] Checking {len(players)} players in guild {guild_id}")
