@@ -87,12 +87,12 @@ async def discord_checks(bot):
             time.sleep(10)
             if not_in_discord:
                 message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
-                #await bot.prc_api._send_command(guild_id, message)
+                await bot.prc_api._send_command(guild_id, message)
                 logging.info(f"[ITERATE] Sent command to {len(not_in_discord)} players in guild {guild_id}")
 
             try:
                 if alert_channel:
-                    #await alert_channel.send(embed=embed)
+                    await alert_channel.send(embed=embed)
                     pass
             except discord.errors.Forbidden:
                 logging.warning(f"[ITERATE] Missing permissions to send messages in guild {guild_id}")
