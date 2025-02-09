@@ -67,7 +67,7 @@ async def discord_checks(bot):
                 member_found = False
 
                 for member in guild.members:
-                    if pattern.search(member.display_name):
+                    if pattern.search(member.display_name) or pattern.search(member.name):
                         member_found = True
                         break
 
