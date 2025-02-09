@@ -114,8 +114,12 @@ class PRC_API_Client:
         await self.session.close()
 
     async def fetch_server_key(self, server_id: int):
-        server_key = await self.bot.settings.find_by_id({"_id": server_id})
-        print(f"Fetching server key for {server_id}: {server_key}")
+        server_key = await self.bot.settings.find_one(
+            {
+                "guild_id": server_id,
+            }
+        )
+        print(f"Fetching server key for {server_id}: {server_key['api_key']}")
         return server_key
 
     async def _send_request(self, method: str, endpoint: str, server_id: int, **kwargs):
@@ -123,7 +127,7 @@ class PRC_API_Client:
         if not server_key or "api_key" not in server_key:
             print(f"Skipping {server_id} due to missing server key")
         async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={
-            "authorization": server_key,
+            "authorization": server_key['api_key'],
             "Content-Type": "application/json"
             }, **kwargs) as resp:
             data = await resp.json()
