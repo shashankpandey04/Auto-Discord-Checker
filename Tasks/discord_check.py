@@ -71,7 +71,7 @@ async def discord_checks(bot):
                         member_found = True
                         break
 
-                    if not member_found:
+                    if member_found == False:
                         embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                         not_in_discord.append(player_name)
 
