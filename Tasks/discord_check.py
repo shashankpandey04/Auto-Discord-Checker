@@ -13,7 +13,7 @@ from Utils.utils import get_discord_by_roblox
 from Utils import prc
 
 
-@tasks.loop(minutes=5, reconnect=True)
+@tasks.loop(seconds=30, reconnect=True)
 async def discord_checks(bot):
     start_time = time.time()
     logging.warning("[ITERATE] Starting Discord Check Iteration")
