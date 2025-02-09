@@ -55,18 +55,25 @@ async def discord_checks(bot):
 
             not_in_discord = []
 
+            def normalize_name(name):
+                """Removes special characters and converts to lowercase for better matching."""
+                return re.sub(r'[^a-zA-Z0-9]', '', name).lower()
+
             for player in players:
-                    
-                player_name = player.Player.split(":")[0]
+                player_name = normalize_name(player.Player.split(":")[0])  # Extract and normalize
                 player_id = player.Player.split(":")[1]
 
-                pattern = re.compile(rf"{''.join([f'({c}|{c.upper()})' for c in player_name])}", re.IGNORECASE)
                 member_found = False
 
                 for member in guild.members:
-                    if pattern.search(member.name) or pattern.search(member.display_name) or (
-                        hasattr(member, 'global_name') and member.global_name and pattern.search(member.global_name)
-                    ):
+                    discord_names = [
+                        normalize_name(member.name),
+                        normalize_name(member.display_name),
+                        normalize_name(getattr(member, 'global_name', '') or '')
+                    ]
+
+                    # Check if the player_name is contained within any of the Discord names
+                    if any(player_name in discord_name for discord_name in discord_names):
                         member_found = True
                         break  # Stop searching once we find a match
 
@@ -74,6 +81,7 @@ async def discord_checks(bot):
                     logging.info(f"[ITERATE] Player {player_name} not found in guild {guild_id}")
                     embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                     not_in_discord.append(player_name)
+
 
             if embed.description == "":
                 embed.description = "> All players are in the Discord server."
