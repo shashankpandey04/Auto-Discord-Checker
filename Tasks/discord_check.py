@@ -61,7 +61,7 @@ async def discord_checks(bot):
                 player_id = player.Player.split(":")[1]
                 player_name = player_name.strip()
 
-                pattern = re.compile(re.escape(player.Player.split(":")[0]), re.IGNORECASE)
+                pattern = re.compile(re.escape(player_name), re.IGNORECASE)
                 member_found = False
 
                 for member in guild.members:
@@ -72,7 +72,7 @@ async def discord_checks(bot):
                         break  # Stop searching once we find a match
 
                 # Append only if we never found the player in the Discord server
-                if not member_found:
+                if member_found is False:
                     embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                     not_in_discord.append(player_name)
 
