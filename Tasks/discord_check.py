@@ -20,10 +20,7 @@ async def discord_checks(bot):
 
     async for guild_data in bot.settings.db.find(
         {
-            "alert_channel": {"$exists": True, "$ne": None},
             "api_key": {"$exists": True, "$ne": None},
-            "role_id": {"$exists": True, "$ne": None},
-            "message": {"$exists": True, "$ne": None},
         }
     ):
         guild_id = guild_data["_id"]
@@ -37,13 +34,13 @@ async def discord_checks(bot):
         except prc.ResponseFailure:
             logging.error(f"PRC ResponseFailure for guild {guild_id}")
             continue
+        logging.info(f"[ITERATE] Checking {len(players)} players in guild {guild_id}")
 
         total_players = len(players)
         minimum_players = guild_data["minimum_players"] if "minimum_players" in guild_data else 0
         if total_players < minimum_players:
             logging.warning(f"[ITERATE] Not enough players in guild {guild_id} ({total_players}/{minimum_players})")
             continue
-        logging.info(f"[ITERATE] Checking {total_players} players in guild {guild_id}")
         
         alert_channel_id = guild_data["alert_channel"]
         try:
