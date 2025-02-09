@@ -38,12 +38,10 @@ async def discord_checks(bot):
             logging.warning(f"[ITERATE] Not enough players in guild {guild_id} ({total_players}/{minimum_players})")
             continue
         
-        alert_channel_id = guild_data["alert_channel"]
         try:
-            alert_channel = guild.get_channel(int(alert_channel_id))
+            alert_channel = guild.get_channel(guild_data["alert_channel"])
         except discord.errors.NotFound:
-            logging.warning(f"[ITERATE] Alert channel with ID {alert_channel_id} not found in guild {guild_id}")
-            continue
+            logging.warning(f"[ITERATE] Alert channel not found in guild {guild_id}")
 
         embed = discord.Embed(
             title="Players Not in Discord",
@@ -92,14 +90,14 @@ async def discord_checks(bot):
             logging.error(f"[ITERATE] Failed to send message to {guild_id} with response {response}")
         
         try:
-        
-            await alert_channel.send(embed=embed)
+            if alert_channel:
+                await alert_channel.send(embed=embed)
         except discord.errors.Forbidden:
-            logging.warning(f"[ITERATE] Missing permissions to send messages in alert channel {alert_channel_id} in guild {guild_id}")
+            logging.warning(f"[ITERATE] Missing permissions to send messages in guild {guild_id}")
         except discord.errors.NotFound:
-            logging.warning(f"[ITERATE] Alert channel with ID {alert_channel_id} not found in guild {guild_id}")
+            logging.warning(f"[ITERATE] Alert channel not found in guild {guild_id}")
         except discord.errors.HTTPException:
-            logging.warning(f"[ITERATE] Failed to send message in alert channel {alert_channel_id} in guild {guild_id}")
+            logging.warning(f"[ITERATE] Failed to send message in guild {guild_id}")
 
         time.sleep(1)
 
