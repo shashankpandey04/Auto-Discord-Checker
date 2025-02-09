@@ -83,8 +83,6 @@ async def discord_checks(bot):
                 icon_url=guild.icon
             )
 
-            print(f"Waiting 10 seconds before sending the message to {len(not_in_discord)} players in guild {guild_id}")
-            time.sleep(10)
             if not_in_discord:
                 message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
                 await bot.prc_api._send_command(guild_id, message)
