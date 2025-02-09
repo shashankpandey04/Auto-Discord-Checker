@@ -121,7 +121,7 @@ class PRC_API_Client:
         await self.session.close()
 
     async def fetch_server_key(self, server_id: int):
-        server_key = await self.bot.settings.db.find_one({"_id": server_id})
+        server_key = await self.bot.settings.db.find_one({"guild_id": str(server_id)})
 
         if not server_key:
             print(f"Server key not found for {server_id}")
