@@ -96,7 +96,8 @@ async def discord_checks(bot):
 
             try:
                 if alert_channel:
-                    await alert_channel.send(embed=embed)
+                    #await alert_channel.send(embed=embed)
+                    pass
             except discord.errors.Forbidden:
                 logging.warning(f"[ITERATE] Missing permissions to send messages in guild {guild_id}")
             except discord.errors.NotFound:
