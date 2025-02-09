@@ -21,7 +21,7 @@ async def discord_checks(bot):
     async for guild_data in bot.settings.db.find():
         guild_id = guild_data["_id"]
         try:
-            guild = bot.get_guild(guild_id)
+            guild = bot.get_guild(int(guild_id))
         except discord.errors.NotFound:
             logging.warning(f"[ITERATE] Guild with ID {guild_id} not found")
             continue
