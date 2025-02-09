@@ -71,8 +71,8 @@ async def discord_checks(bot):
                         member_found = True
                         break  # Stop searching once we find a match
 
-                # Append only if we never found the player in the Discord server
-                if member_found is False:
+                if not member_found:
+                    logging.info(f"[ITERATE] Player {player_name} not found in guild {guild_id}")
                     embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                     not_in_discord.append(player_name)
 
