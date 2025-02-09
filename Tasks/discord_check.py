@@ -80,7 +80,6 @@ async def discord_checks(bot):
 
                     # Append only if we never found the player in the Discord server
                     if not member_found:
-                        logging.warning(f"[DEBUG] Player {player_name} not found in guild {guild_id}")
                         embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                         not_in_discord.append(player_name)
 
@@ -94,7 +93,7 @@ async def discord_checks(bot):
 
             if not_in_discord:
                 message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
-                await bot.prc_api._send_command(guild_id, message)
+                #await bot.prc_api._send_command(guild_id, message)
             logging.info(f"[ITERATE] Sent command to {len(not_in_discord)} players in guild {guild_id}")
 
             try:
