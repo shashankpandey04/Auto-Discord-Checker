@@ -16,11 +16,13 @@ class ConfigurationMenu(discord.ui.View):
             api_key = self.sett.get("api_key", 0)
             role_id = self.sett.get("role_id", 0)
             message = self.sett.get("message", "You are not in the communication server. Please join it.")
+            minimum_players = self.sett.get("minimum_players", 0)
         except KeyError:
             alert_channel = 0
             api_key = 0
             role_id = 0
             message = "You are not in the communication server. Please join it."
+            minimum_players = 0
 
         self.alert_channel = discord.ui.ChannelSelect(
             placeholder="Select the alert channel",
@@ -30,8 +32,8 @@ class ConfigurationMenu(discord.ui.View):
             channel_types=[discord.ChannelType.text]
         )
         
-        self.api_key_button = discord.ui.Button(
-            label="API Key",
+        self.minimum_player_button = discord.ui.Button(
+            label="Minimum Players",
             style=discord.ButtonStyle.secondary,
             row=2
         )
@@ -43,11 +45,11 @@ class ConfigurationMenu(discord.ui.View):
         )
 
         self.alert_channel.callback = self.alert_channel_callback
-        self.api_key_button.callback = self.api_key_button_callback
+        self.minimum_player_button.callback = self.minimum_players_callback
         self.message_button.callback = self.message_button_callback
 
         self.add_item(self.alert_channel)
-        self.add_item(self.api_key_button)
+        self.add_item(self.minimum_player_button)
         self.add_item(self.message_button)
 
     async def alert_channel_callback(self, interaction):
@@ -78,7 +80,7 @@ class ConfigurationMenu(discord.ui.View):
             ephemeral=True
         )
 
-    async def api_key_button_callback(self, interaction):
+    async def minimum_players_callback(self, interaction):
         if interaction.user.id != self.user_id:
             return await interaction.response.send_message(
                 embed=discord.Embed(
@@ -91,8 +93,8 @@ class ConfigurationMenu(discord.ui.View):
 
         await interaction.response.send_message(
             embed=discord.Embed(
-                title="API Key",
-                description="Please send the API key in the chat.",
+                title="Minimum Players",
+                description="Please provide the minimum number of players required to start the alert.",
                 color=BLANK_COLOR
             ),
             ephemeral=True
@@ -113,19 +115,19 @@ class ConfigurationMenu(discord.ui.View):
                 )
             )
 
-        self.sett["api_key"] = response.content
+        self.sett["minimum_players"] = int(response.content)
         await self.bot.settings.update_by_id(
             {
                 "_id": self.sett["_id"],
-                "api_key": response.content
+                "minimum_players": int(response.content)
             }
         )
         await response.delete()
 
         await interaction.followup.send(
             embed=discord.Embed(
-                title="API Key Updated",
-                description="The API key has been updated.",
+                title="Minimum Players Updated",
+                description="The minimum players required has been updated.",
                 color=BLANK_COLOR
             ),
             ephemeral=True

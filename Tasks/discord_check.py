@@ -38,11 +38,10 @@ async def discord_checks(bot):
             logging.error(f"PRC ResponseFailure for guild {guild_id}")
             continue
 
-        role_id = guild_data["role_id"]
-        try:
-            role = guild.get_role(role_id)
-        except discord.errors.NotFound:
-            logging.warning(f"[ITERATE] Role with ID {role_id} not found in guild {guild_id}")
+        total_players = len(players)
+        minimum_players = guild_data["minimum_players"] if "minimum_players" in guild_data else 0
+        if total_players < minimum_players:
+            logging.warning(f"[ITERATE] Not enough players in guild {guild_id} ({total_players}/{minimum_players})")
             continue
         
         alert_channel_id = guild_data["alert_channel"]
@@ -92,7 +91,11 @@ async def discord_checks(bot):
         )
 
         message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
-        await bot.prc_api._send_command(guild_id, message)
+        response = await bot.prc_api._send_command(guild_id, message)
+        if response.status == 200:
+            logging.info(f"[ITERATE] Sent message to {guild_id} with response {response}")
+        else:
+            logging.error(f"[ITERATE] Failed to send message to {guild_id} with response {response}")
         
         try:
         

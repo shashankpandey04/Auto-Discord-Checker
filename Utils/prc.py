@@ -114,13 +114,17 @@ class PRC_API_Client:
         await self.session.close()
 
     async def fetch_server_key(self, server_id: int):
-        return await self.bot.erlc_keys.find_by_id(server_id)
+        return await self.bot.settings.find_by_id(
+            {
+                "_id": server_id
+            }
+        )
 
     async def _send_request(self, method: str, endpoint: str, server_id: int, **kwargs):
         server_key = await self.fetch_server_key(server_id)
         if not server_key:
             raise ServerLinkNotFound("Server link not found")
-        async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={"Server-Key": server_key["key"]}, **kwargs) as resp:
+        async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={"Server-Key": server_key["api_key"]}, **kwargs) as resp:
             data = await resp.json()
             if resp.status == 200:
                 return data
