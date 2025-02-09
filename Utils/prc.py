@@ -1,7 +1,7 @@
 import asyncio
 from discord.ext import commands
 import aiohttp
-
+from bson import ObjectId
 class ServerLinkNotFound(commands.CheckFailure):
     pass
 
@@ -116,7 +116,7 @@ class PRC_API_Client:
     async def fetch_server_key(self, server_id: int):
         return await self.bot.settings.find_by_id(
             {
-                "_id": server_id
+                "_id": ObjectId(server_id),
             }
         )
 
