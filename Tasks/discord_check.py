@@ -67,15 +67,16 @@ async def discord_checks(bot):
 
                 for member in guild.members:
                     discord_names = [
-                        normalize_name(member.name),
-                        normalize_name(member.display_name),
-                        normalize_name(getattr(member, 'global_name', '') or '')
+                        normalize_name(member.name).lower(),
+                        normalize_name(member.display_name).lower(),
+                        normalize_name(getattr(member, 'global_name', '')).lower()
                     ]
 
                     # Check if the player_name is contained within any of the Discord names
-                    if any(player_name in discord_name for discord_name in discord_names):
-                        member_found = True
-                        break  # Stop searching once we find a match
+                    for name in discord_names:
+                        if player_name in name:
+                            member_found = True
+                            break
 
                 if not member_found:
                     logging.info(f"[ITERATE] Player {player_name} not found in guild {guild_id}")
