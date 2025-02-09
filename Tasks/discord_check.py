@@ -99,6 +99,7 @@ async def discord_checks(bot):
             if not_in_discord:
                 message = f":pm {','.join(not_in_discord)} {guild_data['message']}"
                 await bot.prc_api._send_command(guild_id, message)
+                logging.info(f"[ITERATE] Sent PM command to guild {guild_id} to notify {len(not_in_discord)} players")
 
             # Send embed to alert channel if it exists
             if alert_channel:
