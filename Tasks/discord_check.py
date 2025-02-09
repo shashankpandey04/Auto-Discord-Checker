@@ -64,16 +64,6 @@ async def discord_checks(bot):
                     break
 
             if not member_found:
-                try:
-                    discord_id = await get_discord_by_roblox(bot, player_name)
-                    if discord_id:
-                        member = guild.get_member(discord_id)
-                        if member:
-                            member_found = True
-                except discord.HTTPException:
-                    pass
-
-            if not member_found:
                 embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                 not_in_discord.append(player_name)
 
