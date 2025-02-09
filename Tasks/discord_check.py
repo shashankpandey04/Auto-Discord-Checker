@@ -59,9 +59,8 @@ async def discord_checks(bot):
                     
                 player_name = player.Player.split(":")[0]
                 player_id = player.Player.split(":")[1]
-                player_name = player_name.strip()
 
-                pattern = re.compile(re.escape(player_name), re.IGNORECASE)
+                pattern = re.compile(rf"{''.join([f'({c}|{c.upper()})' for c in player_name])}", re.IGNORECASE)
                 member_found = False
 
                 for member in guild.members:
