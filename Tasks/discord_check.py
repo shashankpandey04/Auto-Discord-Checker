@@ -64,6 +64,7 @@ async def discord_checks(bot):
                 player_id = player['Player'].split(":")[1]
                 
                 pattern = re.compile(re.escape(player_name), re.IGNORECASE)
+                pattern = re.compile(rf"\b{re.escape(player_name)}\b", re.IGNORECASE)
                 member_found = False
 
                 for member in guild.members:
