@@ -9,7 +9,6 @@ import asyncio
 
 from Utils.constants import BLANK_COLOR
 from Utils.prc import ServerPlayers
-from Utils.utils import get_discord_by_roblox
 from Utils import prc
 
 

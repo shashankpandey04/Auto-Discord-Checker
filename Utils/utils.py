@@ -37,19 +37,6 @@ def discord_time(dt):
     # Return the Discord formatted timestamp
     return f"<t:{unix_timestamp}:R>"
 
-
-async def get_discord_by_roblox(bot,username):
-    api_url = "https://users.roblox.com/v1/usernames/users"
-    payload = {"usernames": [username], "excludeBannedUsers": True}
-    response = requests.post(api_url, json=payload)
-    if response.status_code == 200:
-        data = response.json()["data"][0]
-        id = data["id"]
-        linked_account = await bot.oauth2_users.db.find_one({"roblox_id": id})
-        if linked_account:
-            return linked_account["discord_id"]
-        else:
-            return None
         
 def parse_duration(duration):
     """
