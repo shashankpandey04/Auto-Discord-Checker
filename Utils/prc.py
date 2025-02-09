@@ -147,11 +147,11 @@ class PRC_API_Client:
             elif resp.status == 403:
                 print(f"Unauthorized on {server_id}")
             elif resp.status == 422:
-                print(f"Unprocessable entity on {server_id}")
+                print("The private server has no players in it")
             elif resp.status == 500:
-                print(f"Internal server error on {server_id}")
+                print("Problem communicating with Roblox")
             else:
-                print(f"Error Details: {data.get('detail')}")
+                print(f"{data.get("detail")}")
             
     async def _send_test_request(self, api_key: str):
         async with self.session.request("GET", f"{self.base_url}/server", headers={"Server-Key": api_key}) as resp:
