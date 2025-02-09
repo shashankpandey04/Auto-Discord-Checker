@@ -135,7 +135,8 @@ class PRC_API_Client:
         if not server_key or "api_key" not in server_key:
             print(f"Skipping {server_id} due to missing server key")
         async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={
-            "Server-Key": server_key['api_key']
+            "Server-Key": server_key['api_key'],
+            "Content-Type":"application/json"
             }, **kwargs) as resp:
             data = await resp.json()
             if resp.status == 200:
