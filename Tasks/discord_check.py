@@ -64,7 +64,11 @@ async def discord_checks(bot):
                 member_found = False
 
                 for member in guild.members:
-                    if pattern.search(member.display_name) or pattern.search(member.name):
+                    if pattern.search(member.name) or pattern.search(member.display_name) or (
+                        hasattr(member, 'global_name') and 
+                        member.global_name and 
+                        pattern.search(member.global_name)
+                    ):
                         member_found = True
                         break
 
