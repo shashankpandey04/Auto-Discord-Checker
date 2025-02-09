@@ -56,9 +56,6 @@ async def discord_checks(bot):
             not_in_discord = []
 
             for player in players:
-                # Skip if Player key doesn't exist or is None
-                if not player.get('Player'):
-                    continue
                     
                 player_name = player.Player.split(":")[0]
                 player_id = player.Player.split(":")[1]
