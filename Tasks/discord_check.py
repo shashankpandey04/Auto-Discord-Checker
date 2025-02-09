@@ -16,7 +16,7 @@ async def discord_checks(bot):
     start_time = time.time()
     logging.warning("[ITERATE] Starting Discord Check Iteration")
     total_guilds = 0
-    
+    await asyncio.sleep(5)
     async for guild_data in bot.settings.db.find():
         try:
             guild_id = guild_data["guild_id"] or guild_data["_id"]
