@@ -116,7 +116,7 @@ class PRC_API_Client:
     async def fetch_server_key(self, server_id: int):
         return await self.bot.settings.find_by_id(
             {
-                "_id": ObjectId(str(server_id)),
+                "_id": server_id
             }
         )
 
@@ -126,7 +126,7 @@ class PRC_API_Client:
             raise ServerLinkNotFound("Server link not found")
         async with self.session.request(method, f"{self.base_url}/{endpoint}", headers={
             "authorization": server_key["api_key"],
-            "Content-Type":"application/json"
+            "Content-Type": "application/json"
             }, **kwargs) as resp:
             data = await resp.json()
             if resp.status == 200:
