@@ -141,17 +141,17 @@ class PRC_API_Client:
             if resp.status == 200:
                 return data
             elif resp.status == 429:
-                raise ResponseFailed(data, detail="Rate Limited", code=429)
+                print(f"Rate limited on {server_id}")
             elif resp.status == 400:
-                raise ResponseFailed(data, detail="Bad Request", code=400)
+                print(f"Bad request on {server_id}")
             elif resp.status == 403:
-                raise ResponseFailed(data, detail="Unauthorized", code=403)
+                print(f"Unauthorized on {server_id}")
             elif resp.status == 422:
-                raise ResponseFailed(data, detail="The private server has no players in it", code=422)
+                print(f"Unprocessable entity on {server_id}")
             elif resp.status == 500:
-                raise ResponseFailed(data, detail="Problem communicating with Roblox", code=500)
+                print(f"Internal server error on {server_id}")
             else:
-                raise ResponseFailed(data, detail=data.get("detail"), code=data.get("code"))
+                print(f"Error Details: {data.get('detail')}")
             
     async def _send_test_request(self, api_key: str):
         async with self.session.request("GET", f"{self.base_url}/server", headers={"Server-Key": api_key}) as resp:
