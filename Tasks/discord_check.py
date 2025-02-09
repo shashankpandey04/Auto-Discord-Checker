@@ -58,35 +58,35 @@ async def discord_checks(bot):
             import unicodedata
 
             def normalize_name(name):
-                """Cleans up names for better matching."""
-                # Remove everything before the first special character
-                name = re.sub(r'^[^a-zA-Z0-9]*', '', name)
-                # Remove special characters and convert to lowercase
+                """Removes prefixes, special characters, and converts to lowercase."""
+                # Remove everything before the first letter/number
+                name = re.sub(r'^[^a-zA-Z0-9]+', '', name)
+                # Remove remaining special characters and convert to lowercase
                 return re.sub(r'[^a-zA-Z0-9]', '', name).lower()
 
+
             for player in players:
-                player_name = normalize_name(player.Player.split(":")[0])  # Extract and normalize
+                player_name = normalize_name(player.Player.split(":")[0])  # Clean the player name
                 player_id = player.Player.split(":")[1]
 
                 member_found = False
 
                 for member in guild.members:
-                    discord_names = [
-                        normalize_name(member.name).lower(),
-                        normalize_name(member.display_name).lower(),
-                        normalize_name(getattr(member, 'global_name', '')).lower()
-                    ]
+                    discord_names = {
+                        normalize_name(member.name),
+                        normalize_name(member.display_name),
+                        normalize_name(getattr(member, 'global_name', '') or '')
+                    }
 
-                    # Check if the player_name is contained within any of the Discord names
-                    for name in discord_names:
-                        if player_name in name:
-                            member_found = True
-                            break
+                    # Check for an **exact match** instead of partial match
+                    if player_name in discord_names:
+                        member_found = True
+                        break
 
                 if not member_found:
-                    #logging.info(f"[ITERATE] Player {player_name} not found in guild {guild_id}")
                     embed.description += f"> [{player_name}](https://roblox.com/users/{player_id}/profile)\n"
                     not_in_discord.append(player_name)
+
 
 
             if embed.description == "":
