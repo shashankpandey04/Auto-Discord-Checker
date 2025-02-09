@@ -18,11 +18,7 @@ async def discord_checks(bot):
     start_time = time.time()
     logging.warning("[ITERATE] Starting Discord Check Iteration")
 
-    async for guild_data in bot.settings.db.find(
-        {
-            "api_key": {"$exists": True, "$ne": None},
-        }
-    ):
+    async for guild_data in bot.settings.db.find():
         guild_id = guild_data["_id"]
         try:
             guild = bot.get_guild(guild_id)

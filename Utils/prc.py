@@ -1,7 +1,14 @@
 import asyncio
 from discord.ext import commands
 import aiohttp
-from bson import ObjectId
+import pymongo
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+mongo = pymongo.MongoClient(os.getenv("MONGO_URI"))
+db = mongo["erlc_checker"]
 class ServerLinkNotFound(commands.CheckFailure):
     pass
 
@@ -114,12 +121,13 @@ class PRC_API_Client:
         await self.session.close()
 
     async def fetch_server_key(self, server_id: int):
-        server_key = await self.bot.settings.db.find_one(
-            {
-                "guild_id": server_id,
-            }
-        )
-        print(f"Fetching server key for {server_id}: {server_key['api_key']}")
+        server_key = await self.bot.settings.db.find_one({"_id": server_id})
+
+        if not server_key:
+            print(f"Server key not found for {server_id}")
+            return None
+        
+        print(f"Fetching server key for {server_id}: {server_key.get('api_key', 'No API Key Found')}")
         return server_key
 
     async def _send_request(self, method: str, endpoint: str, server_id: int, **kwargs):
